@@ -34,16 +34,31 @@ declare(strict_types=1);
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <?php foreach ($header_menu as $menu_item): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= htmlspecialchars($menu_item['url']) ?>">
+                                <?= htmlspecialchars($menu_item['title']) ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Головна</a>
-                    </li>
                     <?php if (isset($header_categories)): ?>
-                        <?php foreach ($header_categories as $category): ?>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/category.php?id=<?= $category['id'] ?>"><?= htmlspecialchars($category['name']) ?></a>
-                            </li>
-                        <?php endforeach; ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Категорії
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="categoryDropdown">
+                                <?php foreach ($header_categories as $category): ?>
+                                    <li>
+                                        <a class="dropdown-item" href="/category.php?id=<?= $category['id'] ?>">
+                                            <?= htmlspecialchars($category['name']) ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
                     <?php endif; ?>
                 </ul>
                 <div class="d-flex ms-lg-3">

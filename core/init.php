@@ -48,5 +48,20 @@ if (($_ENV['APP_ENV'] ?? 'development') === 'development') {
     ini_set('display_errors', '0');
 }
 
-// Include models/functions (to be implemented in Phase 2)
-// require_once __DIR__ . '/functions.php';
+// Include models/functions
+require_once __DIR__ . '/functions.php';
+
+// Initialize Database connection
+try {
+    $db_connection = get_db_connection();
+    
+    // Global data available to all views
+    $header_menu = get_navigation_menu($db_connection);
+    $header_categories = get_active_categories($db_connection);
+} catch (PDOException $e) {
+    if (($_ENV['APP_ENV'] ?? 'development') === 'development') {
+        die("Помилка підключення до бази даних: " . $e->getMessage());
+    }
+    error_log("DB Connection Error: " . $e->getMessage());
+    // In production, we might show a cleaner error page
+}
