@@ -1,0 +1,19 @@
+{
+    "name": "brotop1gg/flora-fauna-directory",
+    "description": "Individual project for Web Technologies: Flora and Fauna Directory",
+    "type": "project",
+    "require": {
+        "php": ">=8.3",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "core/"
+        }
+    },
+    "authors": [
+        {
+            "name": "BroTop1GG"
+        }
+    ]
+}

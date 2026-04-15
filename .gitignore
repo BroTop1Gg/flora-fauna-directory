@@ -1,0 +1,6 @@
+# Temporary folder that contains data to construct project.
+temp
+.agent_memory
+
+# Architectural decisions and project architecture planning
+docx-ad

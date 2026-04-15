@@ -1,0 +1,14 @@
+# Prevent access to .env files
+<Files ".env">
+    Require all denied
+</Files>
+
+# Prevent access to .env.example
+<Files ".env.example">
+    Require all denied
+</Files>
+
+# Prevent directory listing
+Options -Indexes
+
+# If we were using a router, we would add Rewrite rules here.
