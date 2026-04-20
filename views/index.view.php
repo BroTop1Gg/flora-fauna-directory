@@ -10,22 +10,22 @@ declare(strict_types=1);
 
 <div class="row align-items-center mb-5">
     <div class="col-lg-8">
-        <h1 class="display-4 fw-bold">Природа України</h1>
-        <p class="lead text-muted">Досліджуйте різноманіття нашого краю: від найдрібніших квітів до величних тварин.</p>
+        <h1 class="display-4 fw-bold">Дика природа</h1>
+        <p class="lead text-muted">Енциклопедія флори та фауни: дізнавайтеся більше про біорізноманіття нашого світу.</p>
     </div>
 </div>
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     <?php if (empty($entries)): ?>
         <div class="col-12 text-center py-5">
-            <div class="alert alert-info">
+            <div class="alert alert-info border-0 bg-light">
                 Наразі в довіднику немає записів. Додайте перший запис через адмін-панель!
             </div>
         </div>
     <?php else: ?>
         <?php foreach ($entries as $entry): ?>
             <div class="col">
-                <div class="card h-100 shadow-sm border-0">
+                <div class="card h-100 border">
                     <?php if (!empty($entry['image_path'])): ?>
                         <img src="/img/<?= htmlspecialchars($entry['image_path']) ?>" 
                              class="card-img-top" 

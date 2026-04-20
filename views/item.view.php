@@ -14,7 +14,7 @@
             </ol>
         </nav>
 
-        <article class="card shadow-sm border-0 overflow-hidden">
+        <article class="card border overflow-hidden">
             <?php if (!empty($entry['image_path'])): ?>
                 <img src="/img/<?= htmlspecialchars($entry['image_path']) ?>" class="card-img-top main-entry-image" alt="<?= htmlspecialchars($entry['title']) ?>" style="max-height: 500px; object-fit: cover;">
             <?php endif; ?>

@@ -29,7 +29,7 @@
     <?php else: ?>
         <?php foreach ($entries as $entry): ?>
             <div class="col">
-                <div class="card h-100 shadow-sm border-0">
+                <div class="card h-100 border">
                     <?php if (!empty($entry['image_path'])): ?>
                         <img src="/img/<?= htmlspecialchars($entry['image_path']) ?>" 
                              class="card-img-top" 

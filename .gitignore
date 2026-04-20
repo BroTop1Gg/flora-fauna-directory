@@ -4,3 +4,11 @@ temp
 
 # Architectural decisions and project architecture planning
 docx-ad
+
+# Environment and Dependencies
+.env
+/vendor/
+
+# User Uploads
+/img/*
+!/img/.htaccess
