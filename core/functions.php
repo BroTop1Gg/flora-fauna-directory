@@ -167,3 +167,108 @@ function get_category_by_id(PDO $connection, int $id): ?array
     $category = $statement->fetch();
     return $category ?: null;
 }
+
+/**
+ * Creates a new directory entry.
+ * 
+ * @param PDO $connection
+ * @param array $data
+ * @return bool
+ */
+function create_entry(PDO $connection, array $data): bool
+{
+    $query = "INSERT INTO entries (category_id, title, content, image_path) 
+              VALUES (:category_id, :title, :content, :image_path)";
+    
+    $statement = $connection->prepare($query);
+    return $statement->execute([
+        'category_id' => $data['category_id'],
+        'title'       => $data['title'],
+        'content'     => $data['content'],
+        'image_path'  => $data['image_path']
+    ]);
+}
+
+/**
+ * Updates an existing directory entry.
+ * 
+ * @param PDO $connection
+ * @param int $id
+ * @param array $data
+ * @return bool
+ */
+function update_entry(PDO $connection, int $id, array $data): bool
+{
+    $query = "UPDATE entries SET 
+              category_id = :category_id, 
+              title = :title, 
+              content = :content, 
+              image_path = :image_path 
+              WHERE id = :id";
+    
+    $statement = $connection->prepare($query);
+    return $statement->execute([
+        'id'          => $id,
+        'category_id' => $data['category_id'],
+        'title'       => $data['title'],
+        'content'     => $data['content'],
+        'image_path'  => $data['image_path']
+    ]);
+}
+
+/**
+ * Deletes an entry and its associated image if it exists.
+ * 
+ * @param PDO $connection
+ * @param int $id
+ * @return bool
+ */
+function delete_entry(PDO $connection, int $id): bool
+{
+    // First, get image path to delete the file
+    $query = "SELECT image_path FROM entries WHERE id = :id LIMIT 1";
+    $statement = $connection->prepare($query);
+    $statement->execute(['id' => $id]);
+    $entry = $statement->fetch();
+
+    if ($entry && !empty($entry['image_path'])) {
+        $full_path = __DIR__ . '/../img/' . $entry['image_path'];
+        if (file_exists($full_path)) {
+            unlink($full_path);
+        }
+    }
+
+    $query = "DELETE FROM entries WHERE id = :id";
+    $statement = $connection->prepare($query);
+    return $statement->execute(['id' => $id]);
+}
+
+/**
+ * Handles file upload for entry images.
+ * 
+ * @param array $file The $_FILES['image'] array.
+ * @return string|null The unique filename or null on failure.
+ */
+function handle_image_upload(array $file): ?string
+{
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        return null;
+    }
+
+    $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    $file_info = getimagesize($file['tmp_name']);
+    
+    if (!$file_info || !in_array($file_info['mime'], $allowed_types)) {
+        return null;
+    }
+
+    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $filename = bin2hex(random_bytes(8)) . '_' . time() . '.' . $extension;
+    $target_path = __DIR__ . '/../img/' . $filename;
+
+    if (move_uploaded_file($file['tmp_name'], $target_path)) {
+        return $filename;
+    }
+
+    return null;
+}
