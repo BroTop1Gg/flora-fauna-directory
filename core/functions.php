@@ -85,3 +85,47 @@ function get_admin_by_username(PDO $connection, string $username): ?array
     $user = $statement->fetch();
     return $user ?: null;
 }
+
+/**
+ * Fetches all directory entries with their associated category name.
+ * 
+ * @param PDO $connection
+ * @param int|null $limit Optional pagination limit.
+ * @return array
+ */
+function get_all_entries(PDO $connection, ?int $limit = null): array
+{
+    $query = "SELECT e.*, c.name as category_name 
+              FROM entries e 
+              JOIN categories c ON e.category_id = c.id 
+              ORDER BY e.created_at DESC";
+    
+    if ($limit !== null) {
+        $query .= " LIMIT " . (int)$limit;
+    }
+
+    $statement = $connection->query($query);
+    return $statement->fetchAll();
+}
+
+/**
+ * Fetches a single directory entry by its ID.
+ * 
+ * @param PDO $connection
+ * @param int $id
+ * @return array|null
+ */
+function get_entry_by_id(PDO $connection, int $id): ?array
+{
+    $query = "SELECT e.*, c.name as category_name 
+              FROM entries e 
+              JOIN categories c ON e.category_id = c.id 
+              WHERE e.id = :id 
+              LIMIT 1";
+    
+    $statement = $connection->prepare($query);
+    $statement->execute(['id' => $id]);
+    
+    $entry = $statement->fetch();
+    return $entry ?: null;
+}
