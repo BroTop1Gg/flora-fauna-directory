@@ -129,3 +129,41 @@ function get_entry_by_id(PDO $connection, int $id): ?array
     $entry = $statement->fetch();
     return $entry ?: null;
 }
+
+/**
+ * Fetches all entries belonging to a specific category.
+ * 
+ * @param PDO $connection
+ * @param int $category_id
+ * @return array
+ */
+function get_entries_by_category(PDO $connection, int $category_id): array
+{
+    $query = "SELECT e.*, c.name as category_name 
+              FROM entries e 
+              JOIN categories c ON e.category_id = c.id 
+              WHERE e.category_id = :category_id 
+              ORDER BY e.created_at DESC";
+    
+    $statement = $connection->prepare($query);
+    $statement->execute(['category_id' => $category_id]);
+    
+    return $statement->fetchAll();
+}
+
+/**
+ * Fetches a single category by its ID.
+ * 
+ * @param PDO $connection
+ * @param int $id
+ * @return array|null
+ */
+function get_category_by_id(PDO $connection, int $id): ?array
+{
+    $query = "SELECT * FROM categories WHERE id = :id LIMIT 1";
+    $statement = $connection->prepare($query);
+    $statement->execute(['id' => $id]);
+    
+    $category = $statement->fetch();
+    return $category ?: null;
+}
