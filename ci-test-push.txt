@@ -1,0 +1,3 @@
+We test does ci-cd with Github Actions actually work:
+
+Try [1]
