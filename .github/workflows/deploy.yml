@@ -3,7 +3,7 @@ name: Deploy via FTP
 on:
   push:
     branches:
-      - main # або master, залежно від того, як називається ваша гілка
+      - main
 
 jobs:
   web-deploy:
@@ -18,4 +18,4 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: /htdocs/ # Папка на хостингу, куди лити файли
+        server-dir: /htdocs/ # Folder where to transefer project data
