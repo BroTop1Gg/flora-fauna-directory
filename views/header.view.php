@@ -50,10 +50,10 @@ declare(strict_types=1);
                                 Категорії
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="categoryDropdown">
-                                <?php foreach ($header_categories as $category): ?>
+                                <?php foreach ($header_categories as $nav_category): ?>
                                     <li>
-                                        <a class="dropdown-item" href="/category.php?id=<?= $category['id'] ?>">
-                                            <?= htmlspecialchars($category['name']) ?>
+                                        <a class="dropdown-item" href="/category.php?id=<?= $nav_category['id'] ?>">
+                                            <?= htmlspecialchars($nav_category['name']) ?>
                                         </a>
                                     </li>
                                 <?php endforeach; ?>
