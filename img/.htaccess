@@ -1,6 +1,4 @@
-# Prevent execution of scripts in the images directory
-php_flag engine off
-<Files *.php>
-    Order Deny,Allow
-    Deny from all
-</Files>
+# Prevent execution of PHP scripts in the images directory
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|phps)$">
+    Require all denied
+</FilesMatch>

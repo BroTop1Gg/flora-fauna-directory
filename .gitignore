@@ -1,14 +1,13 @@
-# Temporary folder that contains data to construct project.
-temp
+# Project construction data
 .agent_memory
-
-# Architectural decisions and project architecture planning
 docx-ad
+temp
 
-# Environment and Dependencies
+# Environment and Credentials
 .env
-/vendor/
 
 # User Uploads
-/img/*
-!/img/.htaccess
+# We track the .htaccess for security, but uploads themselves are usually ignored.
+# However, for this project, we want the images to be part of the repository.
+!/img/
+/img/.htaccess

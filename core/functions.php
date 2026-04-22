@@ -16,17 +16,17 @@ declare(strict_types=1);
 function get_db_connection(): PDO
 {
     // Retrieve configuration strictly from the environment.
-    $host = $_ENV['DB_HOST'];
-    $db   = $_ENV['DB_NAME'];
-    $user = $_ENV['DB_USER'];
-    $pass = $_ENV['DB_PASS'];
-    $charset = $_ENV['DB_CHARSET'];
+    $host = $_ENV['DB_HOST'] ?? $_SERVER['DB_HOST'] ?? '';
+    $db = $_ENV['DB_NAME'] ?? $_SERVER['DB_NAME'] ?? '';
+    $user = $_ENV['DB_USER'] ?? $_SERVER['DB_USER'] ?? '';
+    $pass = $_ENV['DB_PASS'] ?? $_SERVER['DB_PASS'] ?? '';
+    $charset = $_ENV['DB_CHARSET'] ?? $_SERVER['DB_CHARSET'] ?? 'utf8mb4';
 
     /**
      * DSN (Data Source Name)
      * A string that contains the information required to connect to the database.
-     */
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
 
     /**
      * PDO Options
@@ -35,9 +35,9 @@ function get_db_connection(): PDO
      * - ATTR_EMULATE_PREPARES: Disables emulation to use native MySQL prepared statements (security).
      */
     $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
+        PDO::ATTR_EMULATE_PREPARES => false,
     ];
 
     return new PDO($dsn, $user, $pass, $options);
@@ -81,7 +81,7 @@ function get_admin_by_username(PDO $connection, string $username): ?array
     $query = "SELECT id, username, password_hash FROM administrators WHERE username = :username LIMIT 1";
     $statement = $connection->prepare($query);
     $statement->execute(['username' => $username]);
-    
+
     $user = $statement->fetch();
     return $user ?: null;
 }
@@ -99,9 +99,9 @@ function get_all_entries(PDO $connection, ?int $limit = null): array
               FROM entries e 
               JOIN categories c ON e.category_id = c.id 
               ORDER BY e.created_at DESC";
-    
+
     if ($limit !== null) {
-        $query .= " LIMIT " . (int)$limit;
+        $query .= " LIMIT " . (int) $limit;
     }
 
     $statement = $connection->query($query);
@@ -122,10 +122,10 @@ function get_entry_by_id(PDO $connection, int $id): ?array
               JOIN categories c ON e.category_id = c.id 
               WHERE e.id = :id 
               LIMIT 1";
-    
+
     $statement = $connection->prepare($query);
     $statement->execute(['id' => $id]);
-    
+
     $entry = $statement->fetch();
     return $entry ?: null;
 }
@@ -144,10 +144,10 @@ function get_entries_by_category(PDO $connection, int $category_id): array
               JOIN categories c ON e.category_id = c.id 
               WHERE e.category_id = :category_id 
               ORDER BY e.created_at DESC";
-    
+
     $statement = $connection->prepare($query);
     $statement->execute(['category_id' => $category_id]);
-    
+
     return $statement->fetchAll();
 }
 
@@ -163,7 +163,7 @@ function get_category_by_id(PDO $connection, int $id): ?array
     $query = "SELECT * FROM categories WHERE id = :id LIMIT 1";
     $statement = $connection->prepare($query);
     $statement->execute(['id' => $id]);
-    
+
     $category = $statement->fetch();
     return $category ?: null;
 }
@@ -179,13 +179,13 @@ function create_entry(PDO $connection, array $data): bool
 {
     $query = "INSERT INTO entries (category_id, title, content, image_path) 
               VALUES (:category_id, :title, :content, :image_path)";
-    
+
     $statement = $connection->prepare($query);
     return $statement->execute([
         'category_id' => $data['category_id'],
-        'title'       => $data['title'],
-        'content'     => $data['content'],
-        'image_path'  => $data['image_path']
+        'title' => $data['title'],
+        'content' => $data['content'],
+        'image_path' => $data['image_path']
     ]);
 }
 
@@ -205,14 +205,14 @@ function update_entry(PDO $connection, int $id, array $data): bool
               content = :content, 
               image_path = :image_path 
               WHERE id = :id";
-    
+
     $statement = $connection->prepare($query);
     return $statement->execute([
-        'id'          => $id,
+        'id' => $id,
         'category_id' => $data['category_id'],
-        'title'       => $data['title'],
-        'content'     => $data['content'],
-        'image_path'  => $data['image_path']
+        'title' => $data['title'],
+        'content' => $data['content'],
+        'image_path' => $data['image_path']
     ]);
 }
 
@@ -257,7 +257,7 @@ function handle_image_upload(array $file): ?string
 
     $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     $file_info = getimagesize($file['tmp_name']);
-    
+
     if (!$file_info || !in_array($file_info['mime'], $allowed_types)) {
         return null;
     }
