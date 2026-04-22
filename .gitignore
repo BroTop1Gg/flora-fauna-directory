@@ -7,7 +7,5 @@ temp
 .env
 
 # User Uploads
-# We track the .htaccess for security, but uploads themselves are usually ignored.
-# However, for this project, we want the images to be part of the repository.
+# We track the img folder to keep project images in the repository.
 !/img/
-/img/.htaccess
