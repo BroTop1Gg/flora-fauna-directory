@@ -2,8 +2,14 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- Drop existing tables to ensure a clean import
+DROP TABLE IF EXISTS `entries`;
+DROP TABLE IF EXISTS `menu`;
+DROP TABLE IF EXISTS `categories`;
+DROP TABLE IF EXISTS `administrators`;
+
 -- Stores credentials for administrative panel access.
-CREATE TABLE IF NOT EXISTS `administrators` (
+CREATE TABLE `administrators` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `username` VARCHAR(50) NOT NULL UNIQUE,
     `password_hash` VARCHAR(255) NOT NULL,
@@ -11,20 +17,20 @@ CREATE TABLE IF NOT EXISTS `administrators` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Stores biological or environmental groupings (e.g., Mammals, Birds, etc.).
-CREATE TABLE IF NOT EXISTS `categories` (
+CREATE TABLE `categories` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(100) NOT NULL UNIQUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Stores public navigation menu items.
-CREATE TABLE IF NOT EXISTS `menu` (
+CREATE TABLE `menu` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(50) NOT NULL,
     `url` VARCHAR(100) NOT NULL DEFAULT '/'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Stores the primary records for flora and fauna items.
-CREATE TABLE IF NOT EXISTS `entries` (
+CREATE TABLE `entries` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `category_id` INT NOT NULL,
     `title` VARCHAR(255) NOT NULL,
@@ -40,22 +46,22 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- Seed Data
 
 -- Admin account
-INSERT IGNORE INTO `administrators` (`username`, `password_hash`) VALUES 
+INSERT INTO `administrators` (`username`, `password_hash`) VALUES 
 ('admin', '$2y$10$8/LDJoOijFttQQKrMufknOxvZwJ5JQVnFqKk3Qi2CXu9xa/eVwjr.');
 
 -- Initial categories
-INSERT IGNORE INTO `categories` (`id`, `name`) VALUES 
+INSERT INTO `categories` (`id`, `name`) VALUES 
 (1, 'Flora (Рослини)'),
 (2, 'Fauna (Тварини)');
 
 -- Initial menu items
-INSERT IGNORE INTO `menu` (`id`, `title`, `url`) VALUES 
+INSERT INTO `menu` (`id`, `title`, `url`) VALUES 
 (1, 'Головна', '/'),
 (2, 'Про проєкт', '/about.php'),
 (3, 'Контакти', '/contact.php');
 
 -- Initial entries
-INSERT IGNORE INTO `entries` (`id`, `category_id`, `title`, `content`, `image_path`) VALUES 
+INSERT INTO `entries` (`id`, `category_id`, `title`, `content`, `image_path`) VALUES 
 (1, 1, 'Біле латаття (Nymphaea alba)', 'Багаторічна водяна рослина з плаваючим листям і великими білими квітками. Росте в стоячих і повільно текучих водах.', '7154eb892f61ee9d_1776714159.jpeg'),
 (2, 1, 'Дуб звичайний (Quercus robur)', 'Довговічне дерево родини букових. Одна з найпоширеніших деревних порід у помірній смузі Європи.', 'fdfdbd8dc6a9d33c_1776712744.jpeg'),
 (3, 1, 'Сосна звичайна (Pinus sylvestris)', 'Хвойне дерево, що широко розповсюджене в Євразії. Має високу стійкість до несприятливих умов.', '2486baecfa9d12c9_1776712786.jpeg'),
@@ -71,7 +77,7 @@ INSERT IGNORE INTO `entries` (`id`, `category_id`, `title`, `content`, `image_pa
 (13, 2, 'Козуля європейська (Capreolus capreolus)', 'Ссавець родини оленевих. Граційна тварина, поширена в лісових та лісостепових зонах.', '11a2d1a8df47e7cd_1776713464.jpeg'),
 (14, 2, 'Лисиця звичайна (Vulpes vulpes)', 'Найпоширеніший вид роду лисиць. Відома своєю адаптивністю до різних середовищ існування.', 'a73e93e2742f7c89_1776713499.jpg'),
 (15, 2, 'Борсук європейський (Meles meles)', 'Великий хижий ссавець родини куницевих. Веде переважно нічний спосіб життя в складних норах.', 'b96168c2753c7e01_1776713539.jpeg'),
-(16, 2, 'Рись євразійська (Lynx lynx)', 'Великий котячий хижак з характерними китицями на вухах. Мешкає переважно в глухих лісах.', '5edc5686433cd0fb_1776713574.jpg'),
+(16, 2, 'Рись євразійська (Lynx lynx)', 'Великий котячий хижак з характерними китицями на вухах. Мешкає переважно in глухих лісах.', '5edc5686433cd0fb_1776713574.jpg'),
 (17, 2, 'Чорний лелека (Ciconia nigra)', 'Рідкісний птах, що веде прихований спосіб життя. Гніздиться в старих лісах поблизу боліт.', '9154e8f275060261_1776713612.jpg'),
 (18, 2, 'Зубр (Bison bonasus)', 'Найбільший наземний ссавець Європи. Вид, що був врятований від повного вимирання.', '761653493c7e445e_1776713646.jpeg'),
 (19, 2, 'Горностай (Mustela erminea)', 'Малий спритний хижак, відомий зміною забарвлення хутра на біле в зимовий період.', '2111442ffcc28c58_1776713681.jpeg'),
