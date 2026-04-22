@@ -25,7 +25,9 @@ function get_db_connection(): PDO
     /**
      * DSN (Data Source Name)
      * A string that contains the information required to connect to the database.
+     */
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+
 
 
     /**
